@@ -33,8 +33,22 @@ switch (action) {
 
 
 function concertThis(){
-    console.log("Action: concert-this");
-    console.log("UserInput: " + userInput);
+    axios.get(`https://rest.bandsintown.com/artists/${userInput}/events?app_id=1`).then( function(res){
+        console.log("Artist: " + userInput);    
+        let data = res.data;
+        console.log(res.data)
+        data.forEach(function(element) {
+            let date = new Date(element.datetime);
+            let DD = date.getDate();
+            let MM = date.getMonth();
+            let YYYY = date.getYear();
+            console.log("* " + element.venue.name);
+            console.log("* " +element.venue.city);
+            console.log("* " + MM + "/" + DD + "/" + YYYY);
+            console.log("_____________________________");
+        });
+        
+    })
 };
 
 function spotifyThisSong(){
