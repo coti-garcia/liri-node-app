@@ -10,10 +10,7 @@ let userInput = process.argv.slice(3).join("+");
 
 
 
-// fs.readFile("random.txt", "utf8", function(error,data){
-//     if (error) console.log(error);
-//     console.log(data)
-// })
+
 
 
 switch (action) {
@@ -36,7 +33,7 @@ function concertThis(){
     axios.get(`https://rest.bandsintown.com/artists/${userInput}/events?app_id=1`).then( function(res){
         console.log("Artist: " + userInput);    
         let data = res.data;
-        console.log(res.data)
+        // console.log(res.data)
         data.forEach(function(element) {
             let date = new Date(element.datetime);
             let DD = date.getDate();
@@ -54,6 +51,13 @@ function concertThis(){
 function spotifyThisSong(){
     console.log( "Action: spotify-this-song");
     console.log("UserInput: " + userInput);
+    spotify.search({ type: 'track', query: userInput }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+       
+      console.log(data); 
+      });
 };
 
 function movieThis(){
@@ -83,7 +87,13 @@ function movieThis(){
 };
 
 function doWhatItSays(){
-    console.log("Action: do-what-it-say");
-    console.log("UserInput: " + userInput);
+    fs.readFile("random.txt", "utf8", function(error,data){
+        if (error) console.log(error);
+        let arr = data.split(",")
+        let action = arr[0];
+        let input = arr[1];
+        console.log("Action:" + action);
+        console.log("Input:" + input ) 
+    })
 };
 
