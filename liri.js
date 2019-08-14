@@ -2,23 +2,18 @@ require("dotenv").config();
 
 const keys = require("./key.js"); 
 const axios = require("axios");
-var Spotify = require('node-spotify-api');
+const Spotify = require("node-spotify-api");
 let spotify = new Spotify(keys.spotify);
 const fs = require("fs");
 let action = process.argv[2];
-
 let userInput = process.argv.slice(3).join("+");
 
-//console.log(userInput);
-// axios.get("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy").then(function (res){
-
-// });
 
 
-fs.readFile("random.txt", "utf8", function(error,data){
-    if (error) console.log(error);
-    console.log(data)
-})
+// fs.readFile("random.txt", "utf8", function(error,data){
+//     if (error) console.log(error);
+//     console.log(data)
+// })
 
 
 switch (action) {
@@ -36,23 +31,45 @@ switch (action) {
         break;    
 }
 
+
 function concertThis(){
     console.log("Action: concert-this");
     console.log("UserInput: " + userInput);
-}
+};
 
 function spotifyThisSong(){
     console.log( "Action: spotify-this-song");
     console.log("UserInput: " + userInput);
-}
+};
 
 function movieThis(){
-    console.log("Action: movie-this");
-    console.log("UserInput: " + userInput);
-}
+    if (userInput){
+        displayMovie();
+    } else{
+        userInput = "Mr.Nobody";
+        displayMovie();
+    }
+    function displayMovie(){
+        axios.get(`http://www.omdbapi.com/?t=${userInput}&y=&plot=short&apikey=trilogy`).then(function (res){
+            console.log("* "+ res.data.Title);
+            console.log("* "+ res.data.Year);
+            console.log("* IMDB:"+ res.data.imdbRating);
+            console.log("* "+ res.data.Ratings[1].Source + ": " + res.data.Ratings[1].Value);
+            console.log("* "+ res.data.Country);
+            console.log("* "+ res.data.Language);
+            console.log("* "+ res.data.Plot);
+            console.log("* "+ res.data.Actors);
+            if( userInput === "Mr.Nobody"){
+                console.log(`* If you haven't watched "Mr. Nobody," then you should: <http://www.imdb.com/title/tt0485947/>`)
+                console.log("* It's on Netflix!")
+            }
+            console.log("_____________________________");
+        });
+    }
+};
 
 function doWhatItSays(){
     console.log("Action: do-what-it-say");
     console.log("UserInput: " + userInput);
-}
+};
 
